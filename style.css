@@ -1,0 +1,158 @@
+body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+}
+
+.container{
+    text-align:center;
+}
+
+h1{
+    font-size:48px;
+    margin-bottom:10px;
+}
+
+p{
+    font-size:20px;
+    margin-bottom:40px;
+}
+
+.start-btn{
+    padding:15px 40px;
+    font-size:20px;
+    border:none;
+    border-radius:30px;
+    background:#00c6ff;
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.start-btn:hover{
+    background:#0072ff;
+    transform:scale(1.1);
+}
+
+.top-bar{
+position:absolute;
+top:20px;
+left:20px;
+}
+
+.top-bar button{
+margin-right:10px;
+padding:10px 15px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+background:#ffffff22;
+color:white;
+}
+
+input,select{
+
+padding:12px;
+margin:10px;
+border-radius:8px;
+border:none;
+font-size:16px;
+
+}
+
+button{
+
+padding:12px 25px;
+font-size:16px;
+border:none;
+border-radius:20px;
+cursor:pointer;
+
+}
+
+.stock-table{
+
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+background:white;
+color:black;
+border-radius:10px;
+overflow:hidden;
+
+}
+
+.stock-table th{
+
+background:#0072ff;
+color:white;
+padding:12px;
+font-size:16px;
+
+}
+
+.stock-table td{
+
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+
+}
+
+.stock-table input{
+
+width:90%;
+padding:8px;
+border-radius:6px;
+border:1px solid #ccc;
+
+}
+
+.container button{
+
+background:#0072ff;
+color:white;
+padding:12px 25px;
+margin:10px;
+border:none;
+border-radius:20px;
+font-size:16px;
+cursor:pointer;
+
+}
+
+.container button:hover{
+
+background:#0052cc;
+transform:scale(1.05);
+
+}
+
+.stock-button-container{
+display:flex;
+justify-content:center;
+gap:20px;
+flex-wrap:wrap;
+margin-bottom:40px;
+}
+
+.stock-btn{
+background:#1e73e8;
+color:white;
+padding:12px 30px;
+border:none;
+border-radius:25px;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.stock-btn:hover{
+background:#1558b0;
+transform:scale(1.05);
+}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Compare Stocks</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="top-bar">
+
+<button onclick="history.back()">⬅ Back</button>
+
+<button onclick="location.href='/'">🏠 Home</button>
+
+</div>
+
+<div class="container">
+
+<h1>Stock Comparison</h1>
+
+<label>How many stocks do you want to compare?</label>
+
+<input type="number" id="numStocks" min="1" max="5">
+
+<button onclick="createInputs()">Enter Stocks</button>
+
+<div id="stockInputs"></div>
+
+</div>
+
+<script>
+
+function createInputs(){
+
+let num = document.getElementById("numStocks").value
+
+if(num > 5){
+alert("Maximum 5 stocks allowed")
+return
+}
+
+if(num < 1){
+alert("Please enter at least 1 stock")
+return
+}
+
+let container = document.getElementById("stockInputs")
+
+container.innerHTML=""
+
+for(let i=1;i<=num;i++){
+
+container.innerHTML +=
+`
+<input type="text" class="stockName" placeholder="Enter Stock ${i} (Example: RELIANCE)">
+
+`
+}
+
+container.innerHTML +=
+`
+
+<h3>Observation Type</h3>
+
+<select>
+
+<option>Hourly</option>
+<option>Daily</option>
+<option>Monthly</option>
+
+</select>
+
+<br><br>
+
+<button onclick="goToObservation()">Submit</button>
+
+`
+
+}
+
+</script>
+<script>
+
+function goToObservation(){
+
+let num = document.getElementById("numStocks").value
+let obsType = document.querySelector("select").value
+
+let stocks = []
+
+document.querySelectorAll(".stockName").forEach(input=>{
+stocks.push(input.value)
+})
+
+let stockString = stocks.join(",")
+
+window.location.href = `/observations?stocks=${stockString}&type=${obsType}`
+
+}
+
+</script>
+
+</body>
+</html>

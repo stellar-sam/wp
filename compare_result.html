@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Stock Comparison</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="top-bar">
+<button onclick="history.back()">⬅ Back</button>
+<button onclick="location.href='/'">🏠 Home</button>
+</div>
+
+<div class="container">
+
+<h1>Stock Comparison Result</h1>
+
+<div id="comparisonTable"></div>
+
+<h2 id="bestStock"></h2>
+
+</div>
+
+<script>
+
+let data = JSON.parse(localStorage.getItem("stockData"))
+let stocks = JSON.parse(localStorage.getItem("stockNames"))
+
+let results = []
+
+stocks.forEach((name,index)=>{
+
+let prices = data.map(row=>row[index])
+
+let returns=[]
+
+for(let i=1;i<prices.length;i++){
+
+returns.push((prices[i]-prices[i-1])/prices[i-1])
+
+}
+
+let mean = returns.reduce((a,b)=>a+b,0)/returns.length
+
+let variance = returns.reduce((sum,r)=>sum+Math.pow(r-mean,2),0)/returns.length
+
+let std = Math.sqrt(variance)
+
+let score = mean/std
+
+results.push({
+name:name,
+mean:mean,
+variance:variance,
+std:std,
+score:score
+})
+
+})
+
+/* ------- Find Best Stock ------- */
+
+let best = results.reduce((a,b)=> a.score>b.score ? a:b)
+
+/* ------- Create Comparison Table ------- */
+
+let table = `<table class="stock-table">
+
+<tr>
+<th>Stock</th>
+<th>Mean Return</th>
+<th>Variance</th>
+<th>Standard Deviation</th>
+<th>Risk Adjusted Score</th>
+</tr>`
+
+results.forEach(r=>{
+
+table += `<tr>
+
+<td>${r.name}</td>
+<td>${r.mean.toFixed(5)}</td>
+<td>${r.variance.toFixed(5)}</td>
+<td>${r.std.toFixed(5)}</td>
+<td>${r.score.toFixed(5)}</td>
+
+</tr>`
+
+})
+
+table += `</table>`
+
+document.getElementById("comparisonTable").innerHTML = table
+
+document.getElementById("bestStock").innerHTML =
+`🏆 Best Stock According to Risk-Return Analysis: <b>${best.name}</b>`
+
+</script>
+
+</body>
+
+</html>

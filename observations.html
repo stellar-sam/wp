@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Stock Observations</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="top-bar">
+
+<button onclick="history.back()">⬅ Back</button>
+<button onclick="location.href='/'">🏠 Home</button>
+
+</div>
+
+<div class="container">
+
+<h1>Enter Observation Data</h1>
+
+<label>Number of Observations</label>
+
+<input type="number" id="numObs" min="2">
+
+<button onclick="createObservationInputs()">Next</button>
+
+<div id="observationInputs"></div>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search)
+
+const stockNames = params.get("stocks").split(",")
+const obsType = params.get("type")
+
+function createObservationInputs(){
+
+let obs = document.getElementById("numObs").value
+
+let container = document.getElementById("observationInputs")
+
+let table = "<table class='stock-table'>"
+
+table += "<tr><th>Observation</th>"
+
+stockNames.forEach(name=>{
+table += `<th>${name}</th>`
+})
+
+table += "</tr>"
+
+for(let i=1;i<=obs;i++){
+
+let label=""
+
+if(obsType=="Daily") label=`Day ${i}`
+if(obsType=="Hourly") label=`Hour ${i}`
+if(obsType=="Monthly") label=`Month ${i}`
+
+table += `<tr><td>${label}</td>`
+
+stockNames.forEach(()=>{
+table += `<td><input type='number' step='any'></td>`
+})
+
+table += "</tr>"
+
+}
+
+table += "</table>"
+
+table += "<br><button onclick=processData()>Analyze</button>"
+
+container.innerHTML = table
+
+}
+
+</script>
+<script>
+
+function processData(){
+
+let table = document.querySelector(".stock-table")
+
+let rows = table.querySelectorAll("tr")
+
+let data = []
+
+for(let i=1;i<rows.length;i++){
+
+let cells = rows[i].querySelectorAll("input")
+
+let rowData=[]
+
+cells.forEach(c=>{
+rowData.push(parseFloat(c.value))
+})
+
+data.push(rowData)
+
+}
+
+localStorage.setItem("stockData", JSON.stringify(data))
+localStorage.setItem("stockNames", JSON.stringify(stockNames))
+
+window.location.href="/analysis"
+
+}
+
+</script>
+
+</body>
+
+</html>
