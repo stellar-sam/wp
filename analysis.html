@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock Analysis</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="top-bar">
+    <button onclick="history.back()">⬅ Back</button>
+    <button onclick="location.href='index.html'">🏠 Home</button>
+</div>
+<div class="container">
+    <h1>Select Stock for Analysis</h1>
+    <div id="stockButtons" class="stock-button-container"></div>
+    <div id="analysisTable"></div>
+    <br>
+    <button onclick="location.href='compare_result.html'" class="compare-btn">Compare All Stocks</button>
+</div>
+
+<script>
+let data = JSON.parse(localStorage.getItem("stockData"));
+let stocks = JSON.parse(localStorage.getItem("stockNames"));
+let buttonContainer = document.getElementById("stockButtons");
+
+stocks.forEach((name,index) => {
+    buttonContainer.innerHTML += `<button onclick="showAnalysis(${index})">${name}</button>`;
+});
+
+function normalCDF(x) { return (1 + erf(x / Math.sqrt(2))) / 2; }
+function erf(x) {
+    let sign = (x >= 0) ? 1 : -1; x = Math.abs(x);
+    let a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741, a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
+    let t = 1/(1+p*x);
+    let y = 1 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1)*t*Math.exp(-x*x);
+    return sign*y;
+}
+
+function showAnalysis(stockIndex){
+    let prices = data.map(row => row[stockIndex]);
+    let returns = [];
+    for(let i=1; i<prices.length; i++){ returns.push((prices[i]-prices[i-1])/prices[i-1]); }
+    let mean = returns.reduce((a,b)=>a+b,0)/returns.length;
+    let std = Math.sqrt(returns.reduce((sum,r)=>sum+Math.pow(r-mean,2),0)/returns.length);
+    let riskProb = normalCDF((0 - mean) / std) * 100;
+
+    let table = `<h2>${stocks[stockIndex]}</h2><table class="stock-table"><tr><th>Price</th><th>Return</th></tr>`;
+    prices.forEach((p, i) => {
+        let ret = i==0 ? "-" : ((prices[i]-prices[i-1])/prices[i-1]).toFixed(4);
+        table += `<tr><td>${p}</td><td>${ret}</td></tr>`;
+    });
+    table += `</table><br><table class="stock-table">
+        <tr><td>Mean Return</td><td>${mean.toFixed(5)}</td></tr>
+        <tr><td>Risk Prob (%)</td><td>${riskProb.toFixed(2)}%</td></tr></table>`;
+    document.getElementById("analysisTable").innerHTML = table;
+}
+</script>
+</body>
+</html>
